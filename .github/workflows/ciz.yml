@@ -1,4 +1,4 @@
-name: "dev"
+name: "mervic"
 
 on:
   workflow_dispatch:
